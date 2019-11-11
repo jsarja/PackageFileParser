@@ -37,6 +37,10 @@ class PackageData {
             const dependsStr = str.match(re)[0].slice(0, -1).trim()
                 .replace('Depends: ', '').replace(/\([^\)]*\)/g,'');
             depends = dependsStr.split(',')
+            depends = depends.map(pkg => {
+                pkg = pkg.split(' | ');
+                return pkg.map(name => name.trim());
+            })
         }
 
         re = /Provides:.*\n/
@@ -45,6 +49,7 @@ class PackageData {
             const names = str.match(re)[0].slice(0, -1).trim()
                 .replace('Provides: ', '');
             provides = names.split(',')
+            provides = provides.map(pkg => pkg.trim())
         }
 
         this._packageData[name] = {name, description, depends, provides};
@@ -56,7 +61,6 @@ class PackageData {
     }
 
     getPackageInfo(packageName) {
-        console.log(packageName)
         return this._packageData[packageName]
     }
 }
