@@ -11,6 +11,7 @@ app.set('view engine', 'hbs')
 const port = process.env.PORT || 3000;
 let packageData = null;
 
+// HBS helper for recreating dependency name strings which are separated with | 
 hbs.registerHelper('ifNotLast', function(v1, v2, options) {
     if(v1 < v2-1) {
         return options.fn(this);
@@ -19,6 +20,7 @@ hbs.registerHelper('ifNotLast', function(v1, v2, options) {
 });
 
 app.get('/', (req, res) => {
+    // Fetch all package data if it is not yet done.
     if(!packageData) {
         try {
             packageData = new PackageData();
@@ -32,11 +34,10 @@ app.get('/', (req, res) => {
 });
 
 app.get('/package/:packageName', (req, res) => {
+    // Fetch all package data if it is not yet done.
     if(!packageData) {
         try {
-            console.log("Here")
             packageData = new PackageData();
-            console.log(packageData)
         }
         catch (e) {
             res.send('Error in reading the package file.');
@@ -50,5 +51,5 @@ app.get('/package/:packageName', (req, res) => {
 })
 
 app.listen(port, () => {
-    console.log(`Running on: http://localhost:${port}/`)
+    console.log(`Running on port: ${port}/`)
 });
