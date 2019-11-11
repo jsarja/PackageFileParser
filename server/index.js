@@ -19,6 +19,13 @@ hbs.registerHelper('ifNotLast', function(v1, v2, options) {
     return options.inverse(this);
 });
 
+// HBS helper for keeping line breaks. 
+hbs.registerHelper('breaklines', function(text) {
+    text = hbs.Utils.escapeExpression(text);
+    text = text.replace(/(\r\n|\n|\r)/gm, '<br>');
+    return new hbs.SafeString(text);
+});
+
 app.get('/', (req, res) => {
     // Fetch all package data if it is not yet done.
     if(!packageData) {
