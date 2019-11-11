@@ -1,16 +1,33 @@
 const express = require('express')
 const PackageData = require('./PackageData')
-const fs = require('fs')
 
 const app = express();
 const port = process.env.PORT || 3000;
-let packageInfo = null;
+let packageData = null;
 
 app.get('/', (req, res) => {
-    if(!packageInfo) {
-        packageInfo = new PackageData();
+    if(!packageData) {
+        try {
+            packageData = new PackageData();
+        }
+        catch (e) {
+            res.send('Error in reading the package file.');
+        }
     }
-    res.send('hello worlds');
+    res.send(packageData.getPackageList());
+});
+
+app.get('/package/:packageName', (req, res) => {
+    if(!packageData) {
+        try {
+            packageData = new PackageData();
+        }
+        catch (e) {
+            res.send('Error in reading the package file.');
+        }
+    }
+
+    res.send(packageData.getPackageInfo(req.params.packageName));
 })
 
 app.listen(port, () => {
