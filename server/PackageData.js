@@ -77,7 +77,20 @@ class PackageData {
     }
 
     getPackageInfo(packageName) {
-        return this._packageData[packageName]
+        const packageInfo = this._packageData[packageName];
+        if(packageInfo && packageInfo.depends) {
+            packageInfo.depends = packageInfo.depends.map(pkgList=> {
+                return pkgList.map(pkgName => {
+                    // Only render depedencies which are in package list as links.
+                    if(this._packageNames.includes(pkgName)) {
+                        return `<a href="/package/${pkgName}">${pkgName}</a>`;
+                    }
+                    // If name is not on the list render it just as a plain text.
+                    return pkgName;
+                })
+            });
+        }
+        return packageInfo
     }
 }
 

@@ -40,23 +40,10 @@ app.get('/package/:packageName', (req, res) => {
             res.send('Error in reading the package file.');
         }
     }
-
-    // Only render depedencies which are in package name list as links.
-    // If name is not on the list render it just as a plain text.
-    const packageNames = packageData.getPackageList();
-    const packageInfo = packageData.getPackageInfo(req.params.packageName);
-    packageInfo.depends = packageInfo.depends.map(pkgList=> {
-        return pkgList.map(pkgName => {
-            if(packageNames.includes(pkgName)) {
-                return `<a href="/package/${pkgName}">${pkgName}</a>`;
-            }
-            return pkgName;
-        })
-    });
-
+    
     res.render(
         'packageDetail', 
-        {packageInfo}
+        {packageInfo: packageData.getPackageInfo(req.params.packageName)}
     );
 })
 
