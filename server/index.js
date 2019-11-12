@@ -12,7 +12,7 @@ app.set('view engine', 'hbs')
 const port = process.env.PORT || 3000;
 let packageData = null;
 
-// HBS helpers for rendering information in intended format. 
+// HBS helpers for rendering information in wanted format. 
 hbs.registerHelper('ifNotLast', ifNotLast);
 hbs.registerHelper('breaklines', breakLines);
 
@@ -41,9 +41,22 @@ app.get('/package/:packageName', (req, res) => {
         }
     }
 
+    // Only render depedencies which are in package name list as links.
+    // If name is not on the list render it just as a plain text.
+    const packageNames = packageData.getPackageList();
+    const packageInfo = packageData.getPackageInfo(req.params.packageName);
+    packageInfo.depends = packageInfo.depends.map(pkgList=> {
+        return pkgList.map(pkgName => {
+            if(packageNames.includes(pkgName)) {
+                return `<a href="/package/${pkgName}">${pkgName}</a>`;
+            }
+            return pkgName;
+        })
+    });
+
     res.render(
         'packageDetail', 
-        {packageInfo: packageData.getPackageInfo(req.params.packageName)}
+        {packageInfo}
     );
 })
 

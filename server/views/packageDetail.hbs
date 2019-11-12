@@ -18,12 +18,12 @@
         {{#each packageInfo.depends}}
             {{#each this}}
                 {{#ifNotLast @index ../this.length}}
-                    <a href="/package/{{this}}">{{this}}</a> | 
+                    {{{this}}} | 
                 {{else}}
                     {{#ifNotLast @../index ../../packageInfo.depends.length}}
-                        <a href="/package/{{this}}">{{this}}</a>, 
+                        {{{this}}}, 
                     {{else}}
-                        <a href="/package/{{this}}">{{this}}</a>
+                        {{{this}}}
                     {{/ifNotLast}}
                 {{/ifNotLast}}
             {{/each}}
