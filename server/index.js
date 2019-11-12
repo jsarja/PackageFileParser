@@ -3,6 +3,7 @@ const path = require('path')
 const hbs = require('hbs');
 
 const PackageData = require('./PackageData')
+const { ifNotLast, breakLines } = require('./helpers/hbs')
 
 const app = express();
 app.set('views', path.join(__dirname, 'views'))
@@ -11,20 +12,9 @@ app.set('view engine', 'hbs')
 const port = process.env.PORT || 3000;
 let packageData = null;
 
-// HBS helper for recreating dependency name strings which are separated with | 
-hbs.registerHelper('ifNotLast', function(v1, v2, options) {
-    if(v1 < v2-1) {
-        return options.fn(this);
-    }
-    return options.inverse(this);
-});
-
-// HBS helper for keeping line breaks. 
-hbs.registerHelper('breaklines', function(text) {
-    text = hbs.Utils.escapeExpression(text);
-    text = text.replace(/(\r\n|\n|\r)/gm, '<br>');
-    return new hbs.SafeString(text);
-});
+// HBS helpers for rendering information in intended format. 
+hbs.registerHelper('ifNotLast', ifNotLast);
+hbs.registerHelper('breaklines', breakLines);
 
 app.get('/', (req, res) => {
     // Fetch all package data if it is not yet done.
