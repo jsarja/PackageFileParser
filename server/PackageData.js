@@ -26,7 +26,8 @@ class PackageData {
         let re = /Package:.*\n/;
         const name = str.match(re)[0].trim().replace('Package: ', '');
 
-        // Search package description if it is provided.
+        // Search package description if it is provided. 
+        // End regex search to first line that doesn't star with whitespace char.
         re = /Description:[\s\S]*\n\S/;
         let description = '';
         if(str.match(re)) {
@@ -64,6 +65,7 @@ class PackageData {
             })
         }
 
+        // Object might exist if it has provides-information added to it already.
         if (name in this._packageData) {
             Object.assign(this._packageData[name], {name, description, depends});
         } else {
