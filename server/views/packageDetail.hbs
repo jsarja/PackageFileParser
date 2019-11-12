@@ -20,7 +20,11 @@
                 {{#ifNotLast @index ../this.length}}
                     <a href="/package/{{this}}">{{this}}</a> | 
                 {{else}}
-                    <a href="/package/{{this}}">{{this}}</a>
+                    {{#ifNotLast @../index ../../packageInfo.depends.length}}
+                        <a href="/package/{{this}}">{{this}}</a>, 
+                    {{else}}
+                        <a href="/package/{{this}}">{{this}}</a>
+                    {{/ifNotLast}}
                 {{/ifNotLast}}
             {{/each}}
         {{/each}}
@@ -28,7 +32,11 @@
     <div>
         <b>Packages that depends on this package: </b>
         {{#each packageInfo.provides}}
-            <a href="/package/{{this}}">{{this}}</a>
+            {{#ifNotLast @index ../packageInfo.provides.length}}
+                <a href="/package/{{this}}">{{this}}</a>, 
+            {{else}}
+                <a href="/package/{{this}}">{{this}}</a>
+            {{/ifNotLast}}
         {{/each}}
     </div>
 </body>
